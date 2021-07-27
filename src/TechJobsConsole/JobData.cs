@@ -25,8 +25,11 @@ namespace TechJobsConsole
             LoadData();
 
             List<string> values = new List<string>();
+            //pull from copy vs orig
+            List<Dictionary<string, string>> AllJobsCopy = AllJobs.GetRange(0, AllJobs.Count);
 
-            foreach (Dictionary<string, string> job in AllJobs)
+            //foreach (Dictionary<string, string> job in AllJobs)
+            foreach (Dictionary<string, string> job in AllJobsCopy)
             {
                 string aValue = job[column];
 
@@ -38,6 +41,31 @@ namespace TechJobsConsole
             return values;
         }
 
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            //load data, if not already loaded
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+            
+            //loop through each row of Dictionaries in AllJobs
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                //foreach key in row Dictionary of AllJobs
+                foreach (string key in row.Keys)
+                {
+                    //aValue is specific key of row
+                    string aValue = row[key].ToLower();
+                    //if it contains user's input (value)
+                    if (aValue.Contains(value.ToLower()))
+                    {
+                        jobs.Add(row);
+                    }
+                }
+            }
+            return jobs;
+        }
+
         public static List<Dictionary<string, string>> FindByColumnAndValue(string column, string value)
         {
             // load data, if not already loaded
@@ -47,9 +75,9 @@ namespace TechJobsConsole
 
             foreach (Dictionary<string, string> row in AllJobs)
             {
-                string aValue = row[column];
+                string aValue = row[column].ToLower();
 
-                if (aValue.Contains(value))
+                if (aValue.Contains(value.ToLower()))
                 {
                     jobs.Add(row);
                 }
